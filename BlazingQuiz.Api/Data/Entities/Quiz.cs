@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace BlazingQuiz.Api.Entities;
+namespace BlazingQuiz.Api.Data.Entities;
 
 public class Quiz
 {

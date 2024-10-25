@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BlazingQuiz.Api.Entities;
+namespace BlazingQuiz.Api.Data.Entities;
 
 public class Category
 {
