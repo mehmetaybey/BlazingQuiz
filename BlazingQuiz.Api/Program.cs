@@ -21,25 +21,37 @@ builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-
 }).AddJwtBearer(options =>
 {
     var secretKey = builder.Configuration.GetValue<string>("Jwt:Secret");
     var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(secretKey));
-    var signingCred = new SigningCredentials(key,SecurityAlgorithms.HmacSha256);
+    var signingCred = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
     options.TokenValidationParameters = new TokenValidationParameters
     {
         IssuerSigningKey = key,
-        ValidIssuer = builder.Configuration.GetValue<string>("Jwt:Secret"),
+        ValidIssuer = builder.Configuration.GetValue<string>("Jwt:Issuer"),
         ValidAudience = builder.Configuration.GetValue<string>("Jwt:Audience"),
         ValidateIssuer = true,
         ValidateAudience = true,
         ValidateIssuerSigningKey = true
-
-
     };
 });
+
+builder.Services.AddCors(options =>
+{
+    var allowedOriginsStr = builder.Configuration.GetValue<string>("AllowedOrigins");
+    var allowedOrigins = allowedOriginsStr.Split(",", StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+    options.AddDefaultPolicy(policy =>
+    {
+        policy.WithOrigins(allowedOrigins)
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
+
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
@@ -57,7 +69,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors();
 app.UseAuthentication();
 app.MapAuthEndpoints();
 
