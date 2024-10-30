@@ -41,6 +41,7 @@ public class AuthService
         //Generate JWT
         var jwt = GenerateJwtToken(user);
         var loggedInUser = new LoggedInUser(user.Id, user.Name, user.Role, jwt);
+        
         return new AuthResponseDto(loggedInUser);
     }
 

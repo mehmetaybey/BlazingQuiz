@@ -52,7 +52,7 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddScoped<AuthService>();
+builder.Services.AddScoped<AuthService>().AddScoped<CategoryService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
@@ -71,7 +71,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseCors();
 app.UseAuthentication();
-app.MapAuthEndpoints();
+app.MapAuthEndpoints().MapCategoryEndpoint();
 
 app.Run();
 
