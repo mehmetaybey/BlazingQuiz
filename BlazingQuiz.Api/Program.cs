@@ -37,6 +37,7 @@ builder.Services.AddAuthentication(options =>
         ValidateIssuerSigningKey = true
     };
 });
+builder.Services.AddAuthorization();
 
 builder.Services.AddCors(options =>
 {
@@ -69,9 +70,13 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseCors();
-app.UseAuthentication();
-app.MapAuthEndpoints().MapCategoryEndpoint();
+app.UseAuthentication()
+    .UseAuthorization();
+
+app.MapAuthEndpoints()
+    .MapCategoryEndpoint();
 
 app.Run();
 

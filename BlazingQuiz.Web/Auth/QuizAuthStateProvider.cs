@@ -23,7 +23,7 @@ namespace BlazingQuiz.Web.Auth
         public override Task<AuthenticationState> GetAuthenticationStateAsync() => _authStateTask;
 
         public LoggedInUser User { get; private set; }
-        public bool IsLoggedIn => User != null;
+        public bool IsLoggedIn => User != null && User.Id != Guid.Empty;
 
         public async Task SetLoginAsync(LoggedInUser user)
         {
