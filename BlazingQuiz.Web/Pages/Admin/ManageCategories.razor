@@ -5,7 +5,7 @@
 <div class="container">
     <hr1>Manage Categories</hr1>
     <div class="row">
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <EditForm Model="_category" OnValidSubmit="SaveCategoryAsync">
                 <DataAnnotationsValidator/>
                 <div class="card">
@@ -18,11 +18,26 @@
                                 </label>
                                 <InputText class="form-control form-control-sm" @bind-Value="_category.Name"/>
                                 <ValidationMessage For="() => _category.Name"/>
-
                             </div>
-                            <div class="card-footer d-flex justify-content-between align-items-center">
-                                <button type="button" class="btn btn-sm btn-danger">Cancel</button>
-                                <button type="submit" class="btn btn-sm btn-success">Save</button>
+                            @if (_errorMessage !=null)
+                            {
+                                <div class="mb-3 border border-danger border-1 d-flex justify-content-between gap-2 align-items-start">
+                                    <p class="mb-0 p-1"> @_errorMessage</p>
+                                    <button type="button" class="btn btn-sm btn-danger" @onclick="()=>_errorMessage=null"></button>
+                                </div>
+                            }
+                            <div class="card-footer d-flex justify-content-between align-items-start">
+                                @if (!_isBusy)
+                                {
+                                    <button type="button" class="btn btn-sm btn-danger" @onclick="() => _category=new()">Cancel</button>
+                                    <button type="submit" class="btn btn-sm btn-success">Save</button>
+                                }
+                                else
+                                {
+                                    <button type="button" disabled="disabled" class="btn btn-sm btn-secondary">Cancel</button>
+                                    <button type="button" disabled="disabled" class="btn btn-sm btn-secondary">Saving Category...</button>
+                                }
+                               
                             </div>
                         </div>
                     </div>
@@ -73,6 +88,8 @@
 
     private CategoryDto[] _categories = [];
     private CategoryDto _category = new ();
+    private bool _isBusy;
+    private string? _errorMessage;
 
     private async Task LoadCategoriesAsync()
     {
@@ -90,18 +107,24 @@
     {
         try
         {
+            _isBusy = true;
             var response = await CategoryApi.SaveCategoryAsync(_category);
             if (!response.IsSuccess)
             {
-              return;
+                _errorMessage = response.ErrorMessage ?? "Unknown error in saving category";
+                return;
             }
+
             _category = new();
             await LoadCategoriesAsync();
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            _errorMessage = e.Message;
+        }
+        finally
+        {
+            _isBusy = false;
         }
     }
 }
