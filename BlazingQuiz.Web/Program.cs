@@ -30,6 +30,9 @@ static void ConfigureRefit(IServiceCollection service)
     service.AddRefitClient<IAuthApi>()
         .ConfigureHttpClient(SetHttpClient);
 
+    service.AddRefitClient<IQuizApi>(GetRefitSettings)
+        .ConfigureHttpClient(SetHttpClient);
+
     service.AddRefitClient<ICategoryApi>(GetRefitSettings)
         .ConfigureHttpClient(SetHttpClient);
 

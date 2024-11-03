@@ -53,7 +53,7 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddScoped<AuthService>().AddScoped<CategoryService>();
+builder.Services.AddScoped<AuthService>().AddScoped<CategoryService>().AddScoped<QuizService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
