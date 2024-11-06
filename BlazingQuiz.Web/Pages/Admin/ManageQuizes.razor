@@ -70,7 +70,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var quizesTask =  QuizApi.GetQuizesAsunc();
+        var quizesTask =  QuizApi.GetQuizesAsync();
         _categories= await CategoryApi.GetCategoriesAsync();
         _quizzes = await quizesTask;
         _filtredQuizzes = _quizzes;

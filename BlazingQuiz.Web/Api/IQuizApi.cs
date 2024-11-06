@@ -3,16 +3,16 @@ using Refit;
 
 namespace BlazingQuiz.Web.Api
 {
-    [Headers("Authorization : Bearer")]
+    [Headers("Authorization: Bearer")]
     public interface IQuizApi
     {
         [Post("/api/quizes")]
         Task<QuizApiResponse> SaveQuizAsync(QuizSaveDto dto);
-        
+
         [Get("/api/quizes")]
-        Task<QuizListDto[]> GetQuizesAsunc();
-        
+        Task<QuizListDto[]> GetQuizesAsync();
+
         [Get("/api/quizes/{quizId}/questions")]
-        Task<QuizListDto[]> GetQuizQuestionsAsync(Guid quizId);
+        Task<QuestionDto[]> GetQuizQuestionsAsync(Guid quizId);
     }
 }

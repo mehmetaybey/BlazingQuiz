@@ -5,7 +5,7 @@ namespace BlazingQuiz.Api.Endpoints
 {
     public static class QuizEndpoints
     {
-        public static IEndpointRouteBuilder MapEndpointRouteBuilder(this IEndpointRouteBuilder app)
+        public static IEndpointRouteBuilder MapQuizEndpoints(this IEndpointRouteBuilder app)
         {
             var quizGroup = app.MapGroup("/api/quizes").RequireAuthorization();
 

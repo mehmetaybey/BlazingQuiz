@@ -1,12 +1,14 @@
 ﻿@page "/admin/add-quizes"
 
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
 
 <h1>Add a Quiz </h1>
 <hr/>
 
-<EditForm Model="_quiz">
+<EditForm Model="_quiz" OnValidSubmit="SaveQuizAsync">
     <DataAnnotationsValidator />
     <div class="row">
         <div class="col-sm-3">
@@ -87,7 +89,7 @@
             <button type="button" class="btn btn-info" @onclick="() => _quiz.Question.Add(GetDefaultEmptyQuestion())">Add Question</button>
         </div>
 
-        <div class="col-sm-3">
+        <div class="col-sm-4">
             <div class="mb-3">
                 <div class="form-check form-switch">
                     <InputCheckbox @bind-Value="_quiz.IsActive" class="form-check-input" type="checkbox" role="switch" id="quizIsActive" />
@@ -95,15 +97,12 @@
                 </div>
             </div>
         </div>
+
+        <hr />
+        <button type="submit" class="btn btn-success"> Save Quiz </button>
     </div>
 </EditForm>
 
-
-<div class="input-group">
-    <input type="text" class="form-control" placeholder="Recipient's username" aria-label="Recipient's username with two button addons">
-    <button class="btn btn-outline-secondary" type="button">Button</button>
-    <button class="btn btn-outline-secondary" type="button">Button</button>
-</div>
 
 @code
 {
@@ -118,7 +117,7 @@
     }
 
     private QuestionDto GetDefaultEmptyQuestion()=>      
-        
+
         new QuestionDto
         {
             Option = [new(), new()]
@@ -132,4 +131,26 @@
         }
         o.IsCorrect = true;
     }
+    private async Task SaveQuizAsync()
+    {
+        var errorMessage=_quiz.Validate();
+        if (!string.IsNullOrWhiteSpace(errorMessage))
+        {
+            await ShowAlertAsync(errorMessage);
+            return;
+        }
+        var response = await QuizApi.SaveQuizAsync(_quiz);
+
+        if (!response.IsSuccess)
+        {
+           await ShowAlertAsync(response.ErrorMessage);
+           return;
+        }
+
+        NavigationManager.NavigateTo("/admin/manage-quizes");
+     
+    }
+
+    private async Task ShowAlertAsync(string message,string title="Error")=>
+        await JsRuntime.InvokeVoidAsync("alert", $"{title}\n{message}");
 }
