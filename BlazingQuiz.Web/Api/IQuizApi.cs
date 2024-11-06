@@ -8,5 +8,11 @@ namespace BlazingQuiz.Web.Api
     {
         [Post("/api/quizes")]
         Task<QuizApiResponse> SaveQuizAsync(QuizSaveDto dto);
+        
+        [Get("/api/quizes")]
+        Task<QuizListDto[]> GetQuizesAsunc();
+        
+        [Get("/api/quizes/{quizId}/questions")]
+        Task<QuizListDto[]> GetQuizQuestionsAsync(Guid quizId);
     }
 }
