@@ -13,5 +13,5 @@ public class Options
     public Guid QuestionId { get; set; }
 
     [ForeignKey(nameof(QuestionId))]
-    public virtual Question Question { get; set; }
+    public virtual Questions Questions { get; set; }
 }

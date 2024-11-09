@@ -16,5 +16,5 @@ public class Quiz
     [ForeignKey(nameof(CategoryId))]
     public virtual Category? Category { get; set; }
 
-    public ICollection<Question> Questions { get; set; } = [];
+    public ICollection<Questions> Questions { get;} = [];
 }

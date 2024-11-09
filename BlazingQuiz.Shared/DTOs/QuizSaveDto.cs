@@ -27,10 +27,10 @@ public class QuizSaveDto
       if (Question.Any(q => string.IsNullOrWhiteSpace(q.Text)))
           return "Question Text is required for questions";
   
-      if (Question.Any(q => q.Option.Count < 2))
+      if (Question.Any(q => q.Options.Count < 2))
           return "At-Least 2 options are required for each question";
 
-      if (Question.Any(q => !q.Option.Any(o => o.IsCorrect)))
+      if (Question.Any(q => !q.Options.Any(o => o.IsCorrect)))
             return "At-Least 1 correct option is required for each question";
 
 

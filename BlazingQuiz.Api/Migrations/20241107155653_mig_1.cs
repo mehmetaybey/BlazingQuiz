@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace BlazingQuiz.Api.Data.Repositories.Migrations
+namespace BlazingQuiz.Api.Migrations
 {
     /// <inheritdoc />
     public partial class mig_1 : Migration
@@ -133,7 +133,7 @@ namespace BlazingQuiz.Api.Data.Repositories.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "IsApproved", "Name", "PasswordHash", "Phone", "Role" },
-                values: new object[] { new Guid("38fda523-0dbd-4bc2-b948-2851bb303e76"), "admin@gmail.com", true, "Mehmet Aybey", "AQAAAAIAAYagAAAAEHAAW6vRRDtk8KK7dkRvk2Eokvo0S9SuMwSalTvzekaZZBH/RqmDjS/Qa7pOsHUkCw==", "1234567890", "Admin" });
+                values: new object[] { new Guid("cd80d6a8-7fbd-4836-8725-4b8a932cf9a9"), "admin@gmail.com", true, "Mehmet Aybey", "AQAAAAIAAYagAAAAEPWGOywwShIRYGUNaa3CXbrbk91VSSq+Q9xv99PMP26Qh2hCl66meknlla46Mo/Fhw==", "1234567890", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Options_QuestionId",

@@ -16,7 +16,7 @@ namespace BlazingQuiz.Api.Data.Repositories
 
         public DbSet<Category> Categories { get; set; }
         public DbSet<Options> Options { get; set; }
-        public DbSet<Question> Questions { get; set; }
+        public DbSet<Questions> Questions { get; set; }
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<StudentQuiz> StudentQuizzes { get; set; }
         public DbSet<User> Users { get; set; }

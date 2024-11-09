@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace BlazingQuiz.Api.Data.Entities;
 
-public class Question
+public class Questions
 {
     [Key]
     public Guid Id { get; set; }

@@ -13,6 +13,6 @@ public class QuizListDto
 
     public int TimeInMinutes { get; set; }
     public bool IsActive { get; set; }
-    public List<QuestionDto> Question { get; set; } = [];
+    public List<QuestionDto> Questions { get; set; } = [];
 
 }

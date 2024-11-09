@@ -1,11 +1,13 @@
 ﻿@page "/admin/add-quizes"
+@page "/admin/edit-quizes/{quizId:guid?}"
+
 
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JsRuntime
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
 
-<h1>Add a Quiz </h1>
+<h1>@(IsEditCase ? "Update Quiz" : "Add New Quiz") </h1>
 <hr/>
 
 <EditForm Model="_quiz" OnValidSubmit="SaveQuizAsync">
@@ -60,7 +62,7 @@
                     <textarea  @bind="q.Text" class="form-control" rows="3" />
                     <h6>Options</h6>
                     <ol>
-                        @foreach(var o in q.Option)
+                        @foreach(var o in q.Options)
                         {
                             <li class="p-2 mb-2">
                                 <div class="input-group">
@@ -72,14 +74,14 @@
                                                @onchange="() => SetOptionAsCorrectAnswer(q,o) ">
                                     </div>
                                     <input type="text" @bind="o.Text" class="form-control" >
-                                    <button class="btn btn-danger" type="button" @onclick="() => q.Option.Remove(o)">X</button>
+                                    <button class="btn btn-danger" type="button" @onclick="() => q.Options.Remove(o)">X</button>
 
                                 </div>
                             </li>
                         }
                     </ol>
                     <div class="d-flex justify-content-end">
-                        <button type="button" class="btn btn-sm btn-info" @onclick="() => q.Option.Add(new())">Add Option</button>
+                        <button type="button" class="btn btn-sm btn-info" @onclick="() => q.Options.Add(new())">Add Option</button>
                     </div>
                 </li>
 
@@ -106,13 +108,33 @@
 
 @code
 {
+    [Parameter]
+    public Guid? QuizId { get; set; }
+
+    private bool IsEditCase => QuizId.HasValue && QuizId.Value != Guid.Empty;
+
     private QuizSaveDto _quiz = new();
     private CategoryDto[] _categories = [];
 
     protected override async Task OnInitializedAsync()
     {
-        var question = GetDefaultEmptyQuestion();
-        _quiz.Question = [question];
+        if(IsEditCase)
+        {
+            var quiz = await QuizApi.GetQuizToEditAsync(QuizId!.Value);
+            if (quiz  == null)
+            {
+                NavigationManager.NavigateTo("admin/manage-quizes");
+                return;
+            }
+            _quiz = quiz;
+
+        }
+        else
+        {
+            var question = GetDefaultEmptyQuestion();
+            _quiz.Question = [question];
+        }
+      
         _categories= await CategoryApi.GetCategoriesAsync();
     }
 
@@ -120,12 +142,21 @@
 
         new QuestionDto
         {
-            Option = [new(), new()]
+            Options = [new(), new()]
         };
+
+    protected override void OnParametersSet()
+    {
+        if (!QuizId.HasValue && _quiz.Id != Guid.Empty  )
+        {
+            _quiz= new();
+            _quiz.Question = [GetDefaultEmptyQuestion()];
+        }
+    }
 
     private void SetOptionAsCorrectAnswer(QuestionDto q ,OptionDto o)
     {
-        foreach (var option in q.Option)
+        foreach (var option in q.Options)
         {
             option.IsCorrect = false;
         }

@@ -9,10 +9,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace BlazingQuiz.Api.Data.Repositories.Migrations
+namespace BlazingQuiz.Api.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    [Migration("20241025174346_mig_1")]
+    [Migration("20241107155653_mig_1")]
     partial class mig_1
     {
         /// <inheritdoc />
@@ -65,7 +65,7 @@ namespace BlazingQuiz.Api.Data.Repositories.Migrations
                     b.ToTable("Options");
                 });
 
-            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Question", b =>
+            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Questions", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,11 +178,11 @@ namespace BlazingQuiz.Api.Data.Repositories.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("38fda523-0dbd-4bc2-b948-2851bb303e76"),
+                            Id = new Guid("cd80d6a8-7fbd-4836-8725-4b8a932cf9a9"),
                             Email = "admin@gmail.com",
                             IsApproved = true,
                             Name = "Mehmet Aybey",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHAAW6vRRDtk8KK7dkRvk2Eokvo0S9SuMwSalTvzekaZZBH/RqmDjS/Qa7pOsHUkCw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEPWGOywwShIRYGUNaa3CXbrbk91VSSq+Q9xv99PMP26Qh2hCl66meknlla46Mo/Fhw==",
                             Phone = "1234567890",
                             Role = "Admin"
                         });
@@ -190,16 +190,16 @@ namespace BlazingQuiz.Api.Data.Repositories.Migrations
 
             modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Options", b =>
                 {
-                    b.HasOne("BlazingQuiz.Api.Data.Entities.Question", "Question")
+                    b.HasOne("BlazingQuiz.Api.Data.Entities.Questions", "Questions")
                         .WithMany("Options")
                         .HasForeignKey("QuestionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Question");
+                    b.Navigation("Questions");
                 });
 
-            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Question", b =>
+            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Questions", b =>
                 {
                     b.HasOne("BlazingQuiz.Api.Data.Entities.Quiz", "Quiz")
                         .WithMany("Questions")
@@ -240,7 +240,7 @@ namespace BlazingQuiz.Api.Data.Repositories.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Question", b =>
+            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Questions", b =>
                 {
                     b.Navigation("Options");
                 });
