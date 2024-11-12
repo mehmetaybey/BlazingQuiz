@@ -3,9 +3,11 @@
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
 
+<SectionContent SectionName="pageTitle">Manage Quizes</SectionContent>
+
+
 <div class="container">
-    <h3>Manage Quizes</h3>
-    <hr />
+
     <div class="row">
         <div class="col-sm-3 ms-auto">
             <label class="form-label">Select Category</label>
@@ -33,7 +35,7 @@
                 {
                     <tr>
                         <td colspan="5">
-                            <p class="text-danger">No Quizes found</p>
+                            <p class="text-danger text-center h5">No Quizes found</p>
                         </td>
                     </tr>
                 }

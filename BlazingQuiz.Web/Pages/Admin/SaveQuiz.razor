@@ -7,8 +7,7 @@
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
 
-<h1>@(IsEditCase ? "Update Quiz" : "Add New Quiz") </h1>
-<hr/>
+<SectionContent SectionName="pageTitle">@(IsEditCase ? "Update Quiz" : "Add New Quiz")</SectionContent>
 
 <EditForm Model="_quiz" OnValidSubmit="SaveQuizAsync">
     <DataAnnotationsValidator />
@@ -50,17 +49,17 @@
             </div>
         </div>
         
-        <hr/>
-        <h4 class="">Questions</h4>
+        <hr class="my-2"/>
+        <h5 class="fw-bold">Questions</h5>
         
-        <ol>
+        <ol class="mb-0">
             @foreach (var q in _quiz.Question)
             {
                 var random= Guid.NewGuid();
 
-                <li class="shadow p-3 mb-3">
+                <li class="bg-white p-3 mb-3">
                     <textarea  @bind="q.Text" class="form-control" rows="3" />
-                    <h6>Options</h6>
+                    <h6 class="my-2 fw-bold">Options</h6>
                     <ol>
                         @foreach(var o in q.Options)
                         {
@@ -87,21 +86,23 @@
 
             }
         </ol>
-        <div class="mt-3 d-flex justify-content-center">
+        <div class="mt-0 mb-3 d-flex justify-content-center">
             <button type="button" class="btn btn-info" @onclick="() => _quiz.Question.Add(GetDefaultEmptyQuestion())">Add Question</button>
         </div>
 
-        <div class="col-sm-4">
-            <div class="mb-3">
+        <hr />
+        <div class="row mb-5 align-items-center">
+            <div class="col-sm-3 ms-auto d-flex justify-content-end">
                 <div class="form-check form-switch">
                     <InputCheckbox @bind-Value="_quiz.IsActive" class="form-check-input" type="checkbox" role="switch" id="quizIsActive" />
                     <label class="form-check-label" for="quizIsActive">is Active ?</label>
                 </div>
             </div>
-        </div>
+            <div class="col-sm-5 d-grid me-auto">
+                <button type="submit" class="btn btn-success"> Save Quiz </button>
 
-        <hr />
-        <button type="submit" class="btn btn-success"> Save Quiz </button>
+            </div>
+        </div>
     </div>
 </EditForm>
 

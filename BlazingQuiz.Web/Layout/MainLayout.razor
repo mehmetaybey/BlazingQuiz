@@ -6,10 +6,7 @@
     </div>
 
     <main>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
+    
         <article class="content px-4">
             @if (QuizAuthStateProvider.IsInitializing)
             {
@@ -17,6 +14,11 @@
             }
             else
             {
+                <div>
+                    <h1 class="m-0 h3 fw-bold"> <SectionOutlet SectionName="pageTitle" /> </h1>
+                </div>
+                <hr/>
+
                 @Body
   
             }
