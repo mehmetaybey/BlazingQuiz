@@ -1,6 +1,8 @@
-﻿using System.Security.Claims;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text.Json;
 using BlazingQuiz.Shared;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 
@@ -12,12 +14,14 @@ namespace BlazingQuiz.Web.Auth
         private const string UserDataKey = "userData";
 
         private readonly IJSRuntime _jsRuntime;
+        private readonly NavigationManager _nav;
         private  Task<AuthenticationState> _authStateTask;
 
-        public QuizAuthStateProvider(IJSRuntime jsRuntime)
+        public QuizAuthStateProvider(IJSRuntime jsRuntime, NavigationManager nav)
         {
             _jsRuntime = jsRuntime;
-           SetAuthStateTask();
+            _nav = nav;
+            SetAuthStateTask();
         }
 
         public override Task<AuthenticationState> GetAuthenticationStateAsync() => _authStateTask;
@@ -59,9 +63,15 @@ namespace BlazingQuiz.Web.Auth
                 if (user == null || user.Id == Guid.Empty)
                 {
                     //userdata is invalid
+                    RedirectToLogin();
                     return;
                 }
 
+                if (!IsTokenValid(user.Token))
+                {
+                    RedirectToLogin();
+                    return;
+                }
                 await SetLoginAsync(user);
 
             }
@@ -75,6 +85,33 @@ namespace BlazingQuiz.Web.Auth
             {
                 IsInitializing = false;
             } 
+        }
+
+        private void RedirectToLogin()
+        {
+            _nav.NavigateTo("auth/login");
+        }
+
+        private static bool IsTokenValid(string token)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+                return false;
+            var jwtHandler = new JwtSecurityTokenHandler();
+            
+            if (!jwtHandler.CanReadToken(token))//invalid
+                return false;
+
+            var jwt = jwtHandler.ReadJwtToken(token);
+            var expClaim= jwt.Claims.FirstOrDefault(c => c.Type == JwtRegisteredClaimNames.Exp);
+            if (expClaim == null)
+                return false;
+
+            var expTime = long.Parse(expClaim.Value);
+
+            var expDatetime= DateTimeOffset.FromUnixTimeSeconds(expTime).UtcDateTime;
+            
+            
+            return expDatetime<DateTime.UtcNow;
         }
 
         private void SetAuthStateTask()
