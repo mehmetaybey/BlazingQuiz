@@ -10,14 +10,18 @@ public static class UserEndpoints
         var group = app.MapGroup("/api/users")
             .RequireAuthorization(p=>p.RequireRole(nameof(UserRole.Admin)));
 
-        group.MapGet("", async (UserApprovedFilter filter, int pageNumber, int pageSize, UserService service)
-            => Results.Ok(await service.GetUsersAsync(filter,pageNumber,pageSize)));
+        group.MapGet("", async (UserApprovedFilter approvedType, int startIndex, int pageSize, UserService service)=>
+        {
+            //var approvedFilter=Enum.Parse<UserApprovedFilter>(approveType, true);
+            return Results.Ok(await service.GetUsersAsync(approvedType, startIndex, pageSize));
+        });
+
         group.MapPatch("{userId:Guid}/toogle-status", async (Guid userId, UserService service)
             =>
         {
             await service.ToggleUserApprovedStatusAsync(userId);
             return Results.Ok();
-        });
+        }); 
         return app;
     }
 }

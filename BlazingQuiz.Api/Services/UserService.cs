@@ -14,9 +14,9 @@ public class UserService
         _context = context;
     }
 
-    public async Task<PagedResult<UserDto>> GetUsersAsync(UserApprovedFilter approvedType, int pageNumber, int pageSize)
+    public async Task<PagedResult<UserDto>> GetUsersAsync(UserApprovedFilter approvedType, int startIndex, int pageSize)
     {
-        var query = _context.Users.AsQueryable();
+        var query = _context.Users.Where(u=>u.Role !=nameof(UserRole.Admin)).AsQueryable();
         if (approvedType != UserApprovedFilter.All)
         {
             if (approvedType == UserApprovedFilter.ApprovedOnly)
@@ -28,7 +28,7 @@ public class UserService
 
         var total = await query.CountAsync();
         var users = await query.OrderByDescending(u => u.Id)
-            .Skip((pageNumber - 1) * pageSize)
+            .Skip(startIndex)
             .Take(pageSize)
             .Select(u=> new UserDto(u.Id,u.Name,u.Email,u.Phone,u.IsApproved))
             .ToArrayAsync();

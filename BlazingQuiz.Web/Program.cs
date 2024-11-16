@@ -36,6 +36,9 @@ static void ConfigureRefit(IServiceCollection service)
     service.AddRefitClient<ICategoryApi>(GetRefitSettings)
         .ConfigureHttpClient(SetHttpClient);
 
+    service.AddRefitClient<IUserApi>(GetRefitSettings)
+        .ConfigureHttpClient(SetHttpClient);
+
     static RefitSettings GetRefitSettings(IServiceProvider sp)
     {
         var authStateProvider = sp.GetRequiredService<QuizAuthStateProvider>();
