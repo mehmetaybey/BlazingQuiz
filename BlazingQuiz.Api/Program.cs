@@ -53,7 +53,10 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddScoped<AuthService>().AddScoped<CategoryService>().AddScoped<QuizService>();
+builder.Services.AddScoped<AuthService>()
+    .AddScoped<CategoryService>()
+    .AddScoped<QuizService>()
+    .AddScoped<UserService>();
 builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
@@ -77,7 +80,8 @@ app.UseAuthentication()
 
 app.MapAuthEndpoints()
     .MapCategoryEndpoint()
-    .MapQuizEndpoints();
+    .MapQuizEndpoints()
+    .MapUserEndpoints();
 
 app.Run();
 
