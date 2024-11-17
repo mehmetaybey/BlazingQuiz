@@ -111,7 +111,7 @@ namespace BlazingQuiz.Web.Auth
             var expDatetime= DateTimeOffset.FromUnixTimeSeconds(expTime).UtcDateTime;
             
             
-            return expDatetime<DateTime.UtcNow;
+            return expDatetime>DateTime.UtcNow;
         }
 
         private void SetAuthStateTask()
