@@ -1,5 +1,7 @@
 ﻿@page "/admin/manage-students"
 @inject IUserApi UserApi
+@inject IAppState AppState
+
 
 <SectionContent SectionName="pageTitle">Manage Students</SectionContent>
 
@@ -47,7 +49,9 @@
     {
         _usersProvider = async request =>
         {
+            AppState.ShowLoader("Fetching students");
             var pagedResult = await UserApi.GetUsersAsync(_filter, request.StartIndex,request.Count ?? DefaultPageSize);
+            AppState.HideLoader();
             return GridItemsProviderResult.From(pagedResult.Records,pagedResult.TotalCount);
         };
     }
@@ -56,8 +60,10 @@
     {
         user.IsApproved = !user.IsApproved;
         _shouldRender = false;
+        AppState.ShowLoader("Updating user approval status");
         await UserApi.ToggleUserApprovedStatusAsync(user.Id);
         _shouldRender = true;
+        AppState.HideLoader();
     }
 
     private bool _shouldRender=true;

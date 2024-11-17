@@ -1,7 +1,7 @@
 ﻿@page "/admin/manage-quizes"
-@using BlazingQuiz.Shared.Components.Components
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
+@inject IAppState AppState
 
 <SectionContent SectionName="pageTitle">Manage Quizes</SectionContent>
 
@@ -65,10 +65,10 @@
 @if (_showQuestionModal)
 {
     <Modal Title="Questions"
-           Size="ModalSize.Large"
-           ActionButtonText="Ok"
-           OnActionButtonClick="EventCallback.Factory.Create(this, () => _showQuestionModal = false)"
-           OnCancelButtonClick="EventCallback.Factory.Create(this, () => _showQuestionModal = false)">
+    Size="ModalSize.Large"
+    ActionButtonText="Ok"
+    OnActionButtonClick="EventCallback.Factory.Create(this, () => _showQuestionModal = false)"
+    OnCancelButtonClick="EventCallback.Factory.Create(this, () => _showQuestionModal = false)">
         @foreach (var q in _viewingQuestions)
         {
             <div class="mb-3 shadow p-2">
@@ -88,10 +88,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var quizesTask = QuizApi.GetQuizesAsync();
-        _categories = await CategoryApi.GetCategoriesAsync();
-        _quizzes = await quizesTask;
-        _filtredQuizzes = _quizzes;
+        AppState.ShowLoader("Fetching quizes and categories");
+        try
+        {
+            var quizesTask = QuizApi.GetQuizesAsync();
+            _categories = await CategoryApi.GetCategoriesAsync();
+            _quizzes = await quizesTask;
+            _filtredQuizzes = _quizzes;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        finally
+        {
+            AppState.HideLoader();
+        }
+
     }
 
     private void OnSelectCategoryChanged(ChangeEventArgs e)
@@ -110,7 +124,9 @@
 
     private async Task ViewQuestionsAsync(QuizListDto q)
     {
+        AppState.ShowLoader("Fetching questions");
         _viewingQuestions = await QuizApi.GetQuizQuestionsAsync(q.Id);
+        AppState.HideLoader();
         _showQuestionModal=true;
     }
 

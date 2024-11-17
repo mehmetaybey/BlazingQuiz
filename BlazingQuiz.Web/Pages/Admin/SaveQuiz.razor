@@ -6,6 +6,8 @@
 @inject IJSRuntime JsRuntime
 @inject IQuizApi QuizApi
 @inject ICategoryApi CategoryApi
+@inject IAppState AppState
+
 
 <SectionContent SectionName="pageTitle">@(IsEditCase ? "Update Quiz" : "Add New Quiz")</SectionContent>
 
@@ -121,7 +123,9 @@
     {
         if(IsEditCase)
         {
+            AppState.ShowLoader("Fetching quiz");
             var quiz = await QuizApi.GetQuizToEditAsync(QuizId!.Value);
+            AppState.HideLoader();
             if (quiz  == null)
             {
                 NavigationManager.NavigateTo("admin/manage-quizes");
@@ -135,8 +139,9 @@
             var question = GetDefaultEmptyQuestion();
             _quiz.Question = [question];
         }
-      
+        AppState.ShowLoader("Fetching categories");
         _categories= await CategoryApi.GetCategoriesAsync();
+        AppState.HideLoader();
     }
 
     private QuestionDto GetDefaultEmptyQuestion()=>      
@@ -171,7 +176,9 @@
             await ShowAlertAsync(errorMessage);
             return;
         }
+        AppState.ShowLoader("Saving quiz");
         var response = await QuizApi.SaveQuizAsync(_quiz);
+        AppState.HideLoader();
 
         if (!response.IsSuccess)
         {
