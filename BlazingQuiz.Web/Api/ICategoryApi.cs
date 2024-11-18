@@ -1,4 +1,5 @@
-﻿using BlazingQuiz.Shared.DTOs;
+﻿using System.Threading.Tasks;
+using BlazingQuiz.Shared.DTOs;
 using Refit;
 
 namespace BlazingQuiz.Web.Api

@@ -1,3 +1,4 @@
+using System;
 using BlazingQuiz.Web;
 using BlazingQuiz.Web.Api;
 using BlazingQuiz.Web.Auth;
@@ -6,7 +7,9 @@ using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Refit;
 using System.Net.Http;
+using System.Threading.Tasks;
 using BlazingQuiz.Shared;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
@@ -17,7 +20,8 @@ builder.Services.AddSingleton<QuizAuthStateProvider>();
 builder.Services.AddSingleton<AuthenticationStateProvider>(p => p.GetRequiredService<QuizAuthStateProvider>());
 builder.Services.AddAuthorizationCore();
 
-builder.Services.AddSingleton<IAppState, AppState>();
+builder.Services.AddSingleton<IAppState, AppState>()
+    .AddSingleton<QuizState>();
 
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 
@@ -40,6 +44,9 @@ static void ConfigureRefit(IServiceCollection service)
         .ConfigureHttpClient(SetHttpClient);
 
     service.AddRefitClient<IUserApi>(GetRefitSettings)
+        .ConfigureHttpClient(SetHttpClient);
+    
+    service.AddRefitClient<IStudentQuizApi>(GetRefitSettings)
         .ConfigureHttpClient(SetHttpClient);
 
     static RefitSettings GetRefitSettings(IServiceProvider sp)

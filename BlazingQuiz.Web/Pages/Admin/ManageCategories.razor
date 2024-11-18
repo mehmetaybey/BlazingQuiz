@@ -99,6 +99,7 @@
     private async Task LoadCategoriesAsync()
     {
         AppState.ShowLoader("Fetching categories");
+        await Task.Delay(2500);
         _categories = await CategoryApi.GetCategoriesAsync();
         AppState.HideLoader();
     }
@@ -116,6 +117,7 @@
         {
             AppState.ShowLoader("Saving category");
             _isBusy = true;
+            await Task.Delay(2500);
             var response = await CategoryApi.SaveCategoryAsync(_category);
             if (!response.IsSuccess)
             {

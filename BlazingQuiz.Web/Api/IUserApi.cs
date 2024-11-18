@@ -1,4 +1,6 @@
-﻿using BlazingQuiz.Shared;
+﻿using System;
+using System.Threading.Tasks;
+using BlazingQuiz.Shared;
 using BlazingQuiz.Shared.DTOs;
 using Refit;
 
