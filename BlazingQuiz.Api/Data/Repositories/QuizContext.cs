@@ -20,6 +20,7 @@ namespace BlazingQuiz.Api.Data.Repositories
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<StudentQuiz> StudentQuizzes { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<StudentQuizQuestion> StudentQuizQuestion { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -29,6 +30,9 @@ namespace BlazingQuiz.Api.Data.Repositories
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<StudentQuizQuestion>()
+                .HasKey(s => new { s.StudentQuizId, s.QuestionId });
 
             var adminUser = new User
             {

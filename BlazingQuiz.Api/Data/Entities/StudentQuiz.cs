@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using BlazingQuiz.Api.Enums;
 
 namespace BlazingQuiz.Api.Data.Entities
 {
@@ -14,7 +15,14 @@ namespace BlazingQuiz.Api.Data.Entities
 
         public DateTime StartedOn { get; set; }
 
-        public DateTime CompletedOn { get; set; }
+        public DateTime? CompletedOn { get; set; }
+
+        [AllowedValues(
+            nameof(StudentQuizStatus.Started),
+            nameof(StudentQuizStatus.Completed),
+            nameof(StudentQuizStatus.AutoSubmitted),
+            nameof(StudentQuizStatus.Exited))]
+        public string Status { get; set; } = nameof(StudentQuizStatus.Started);
 
         public int Score { get; set; }
 
@@ -23,5 +31,7 @@ namespace BlazingQuiz.Api.Data.Entities
 
         [ForeignKey(nameof(QuizId))]
         public virtual Quiz Quiz { get; set; }
+
+        public virtual ICollection<StudentQuizQuestion> StudentQuizQuestions { get; set; } = [];
     }
 }
