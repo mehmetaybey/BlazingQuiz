@@ -4,7 +4,8 @@ namespace BlazingQuiz.Web;
 
 public class QuizState
 {
+    public Guid StudentQuizId { get; private set; }
     public QuizListDto? Quiz { get; private set; }
 
-    public void SetQuiz(QuizListDto? quiz) => Quiz = quiz;
+    public void StartQuiz(QuizListDto? quiz,Guid studentQuizId) => (Quiz,StudentQuizId) = (quiz,studentQuizId);
 }

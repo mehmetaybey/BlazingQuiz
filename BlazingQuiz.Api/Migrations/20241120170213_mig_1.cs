@@ -89,7 +89,8 @@ namespace BlazingQuiz.Api.Migrations
                     QuizId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StudentId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     StartedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CompletedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    CompletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Score = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -130,10 +131,32 @@ namespace BlazingQuiz.Api.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "StudentQuizQuestion",
+                columns: table => new
+                {
+                    StudentQuizId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_StudentQuizQuestion", x => new { x.StudentQuizId, x.QuestionId });
+                    table.ForeignKey(
+                        name: "FK_StudentQuizQuestion_Questions_QuestionId",
+                        column: x => x.QuestionId,
+                        principalTable: "Questions",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_StudentQuizQuestion_StudentQuizzes_StudentQuizId",
+                        column: x => x.StudentQuizId,
+                        principalTable: "StudentQuizzes",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "Email", "IsApproved", "Name", "PasswordHash", "Phone", "Role" },
-                values: new object[] { new Guid("cd80d6a8-7fbd-4836-8725-4b8a932cf9a9"), "admin@gmail.com", true, "Mehmet Aybey", "AQAAAAIAAYagAAAAEPWGOywwShIRYGUNaa3CXbrbk91VSSq+Q9xv99PMP26Qh2hCl66meknlla46Mo/Fhw==", "1234567890", "Admin" });
+                values: new object[] { new Guid("25377bd0-fb32-4ce3-a888-8764d8c80cd3"), "admin@gmail.com", true, "Mehmet Aybey", "AQAAAAIAAYagAAAAEK1EAVoMiSqPCrChhRzWbKnExGfKrCZo64YSXFn059SVuiz4VAjW2/mmIC2IWEaNMg==", "1234567890", "Admin" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Options_QuestionId",
@@ -149,6 +172,11 @@ namespace BlazingQuiz.Api.Migrations
                 name: "IX_Quizzes_CategoryId",
                 table: "Quizzes",
                 column: "CategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_StudentQuizQuestion_QuestionId",
+                table: "StudentQuizQuestion",
+                column: "QuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_StudentQuizzes_QuizId",
@@ -168,16 +196,19 @@ namespace BlazingQuiz.Api.Migrations
                 name: "Options");
 
             migrationBuilder.DropTable(
-                name: "StudentQuizzes");
+                name: "StudentQuizQuestion");
 
             migrationBuilder.DropTable(
                 name: "Questions");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "StudentQuizzes");
 
             migrationBuilder.DropTable(
                 name: "Quizzes");
+
+            migrationBuilder.DropTable(
+                name: "Users");
 
             migrationBuilder.DropTable(
                 name: "Categories");

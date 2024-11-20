@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazingQuiz.Api.Migrations
 {
     [DbContext(typeof(QuizContext))]
-    [Migration("20241118191426_mig_2")]
-    partial class mig_2
+    [Migration("20241120170213_mig_1")]
+    partial class mig_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -197,11 +197,11 @@ namespace BlazingQuiz.Api.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a7f7327c-929a-4191-b170-92b2e7fc19e4"),
+                            Id = new Guid("25377bd0-fb32-4ce3-a888-8764d8c80cd3"),
                             Email = "admin@gmail.com",
                             IsApproved = true,
                             Name = "Mehmet Aybey",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN7n1MapKAwGJ7XdFrMgREKd/VsGksIaWIYvc8ZKlTMGk1o4QFuSYCRJr9qTXUN+og==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEK1EAVoMiSqPCrChhRzWbKnExGfKrCZo64YSXFn059SVuiz4VAjW2/mmIC2IWEaNMg==",
                             Phone = "1234567890",
                             Role = "Admin"
                         });
@@ -262,15 +262,15 @@ namespace BlazingQuiz.Api.Migrations
             modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.StudentQuizQuestion", b =>
                 {
                     b.HasOne("BlazingQuiz.Api.Data.Entities.Questions", "Question")
-                        .WithMany()
+                        .WithMany("StudentQuizQuestions")
                         .HasForeignKey("QuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("BlazingQuiz.Api.Data.Entities.StudentQuiz", "StudentQuiz")
-                        .WithMany()
+                        .WithMany("StudentQuizQuestions")
                         .HasForeignKey("StudentQuizId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Question");
@@ -281,11 +281,18 @@ namespace BlazingQuiz.Api.Migrations
             modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Questions", b =>
                 {
                     b.Navigation("Options");
+
+                    b.Navigation("StudentQuizQuestions");
                 });
 
             modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.Quiz", b =>
                 {
                     b.Navigation("Questions");
+                });
+
+            modelBuilder.Entity("BlazingQuiz.Api.Data.Entities.StudentQuiz", b =>
+                {
+                    b.Navigation("StudentQuizQuestions");
                 });
 #pragma warning restore 612, 618
         }

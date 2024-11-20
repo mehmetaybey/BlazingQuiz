@@ -14,4 +14,5 @@ public class Questions
     public virtual Quiz Quiz { get; set; }
 
     public virtual ICollection<Options> Options { get; set; } = [];
+    public virtual ICollection<StudentQuizQuestion> StudentQuizQuestions { get; set; } = [];
 }

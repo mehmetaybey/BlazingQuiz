@@ -22,17 +22,21 @@ namespace BlazingQuiz.Api.Data.Repositories
         public DbSet<User> Users { get; set; }
         public DbSet<StudentQuizQuestion> StudentQuizQuestion { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            base.OnConfiguring(optionsBuilder);
-        }
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<StudentQuizQuestion>()
                 .HasKey(s => new { s.StudentQuizId, s.QuestionId });
+
+            modelBuilder.Entity<StudentQuizQuestion>()
+                .HasOne(s => s.StudentQuiz)
+                .WithMany(s=>s.StudentQuizQuestions)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<StudentQuizQuestion>()
+                .HasOne(s => s.Question)
+                .WithMany(s=>s.StudentQuizQuestions)
+                .OnDelete(DeleteBehavior.NoAction);
 
             var adminUser = new User
             {
