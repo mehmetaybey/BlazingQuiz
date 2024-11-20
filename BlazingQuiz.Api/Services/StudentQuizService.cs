@@ -18,7 +18,7 @@ public class StudentQuizService
     public async Task<QuizListDto[]> GetActiveQuizzesAsync(Guid categoryId)
     {
         var query = _context.Quizzes.Where(q => q.IsActive);
-        if (categoryId !=Guid.Empty)
+        if (categoryId != Guid.Empty)
         {
             query = query.Where(q => q.CategoryId == categoryId);
         }
@@ -28,13 +28,14 @@ public class StudentQuizService
             Id = q.Id,
             CategoryId = q.CategoryId,
             CategoryName = q.Category.Name,
-            Name = q.Category.Name,
+            Name = q.Name, // Bu satýrda hata vardý, düzelttim
             TimeInMinutes = q.TimeInMinutes,
             TotalQuestions = q.TotalQuestions
         }).ToArrayAsync();
-        
+
         return quizzes;
     }
+
 
     public async Task<QuizApiResponse<Guid>> StartQuizAsync(Guid studentId,Guid quizId)
     {
@@ -59,7 +60,7 @@ public class StudentQuizService
 
     }
 
-    public async Task<QuizApiResponse<QuestionDto?>> GetNextQuestionForQuizAsync(Guid studentQuizId,Guid studentId)
+    public async Task<QuizApiResponse<QuestionDto?>> GetNextQuestionForQuizAsync(Guid studentQuizId, Guid studentId)
     {
         var studentQuiz = await _context.StudentQuizzes
             .Include(s => s.StudentQuizQuestions)
@@ -70,34 +71,37 @@ public class StudentQuizService
             return QuizApiResponse<QuestionDto?>.Fail("Quiz does not exist");
         }
 
-        if(studentQuiz.StudentId!= studentId)
+        if (studentQuiz.StudentId != studentId)
         {
             return QuizApiResponse<QuestionDto?>.Fail("Unauthorized access");
         }
 
         var questionServed = await _context.StudentQuizQuestion
-                                                .Select(s => s.QuestionId)
-                                                .ToArrayAsync();
+            .Where(s => s.StudentQuizId == studentQuizId)
+            .Select(s => s.QuestionId)
+            .ToArrayAsync();
 
         var nextQuestion = await _context.Questions
-                .Where(q => q.QuizId == studentQuiz.QuizId)
-                .Where(q => !questionServed.Contains(q.Id))
-                .OrderBy(q => Guid.NewGuid())
-                .Take(1)
-                .Select(q => new QuestionDto
+            .Where(q => q.QuizId == studentQuiz.QuizId)
+            .Where(q => !questionServed.Contains(q.Id))
+            .OrderBy(q => Guid.NewGuid())
+            .Take(1)
+            .Select(q => new QuestionDto
+            {
+                Id = q.Id,
+                Text = q.Text,
+                Options = q.Options.Select(o => new OptionDto
                 {
-                    Id = q.Id,
-                    Text = q.Text,
-                    Options = q.Options.Select(o => new OptionDto
-                    {
-                        Id = o.Id,
-                        Text = o.Text
-                    }).ToList()
-                })
-                .FirstOrDefaultAsync();
+                    Id = o.Id,
+                    Text = o.Text
+                }).ToList()
+            })
+            .FirstOrDefaultAsync();
 
         if (nextQuestion == null)
+        {
             return QuizApiResponse<QuestionDto?>.Fail("No more questions for this quiz");
+        }
 
         try
         {
@@ -109,14 +113,13 @@ public class StudentQuizService
             _context.StudentQuizQuestion.Add(studentQuizQuestion);
             await _context.SaveChangesAsync();
             return QuizApiResponse<QuestionDto?>.Success(nextQuestion);
-
         }
         catch (Exception e)
         {
             return QuizApiResponse<QuestionDto?>.Fail(e.Message);
         }
-
     }
+
 
     public async Task<QuizApiResponse> SaveQuestionResponseAsync(StudentQuizQuestionResponseDto dto, Guid studentId)
     {

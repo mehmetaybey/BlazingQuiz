@@ -22,7 +22,7 @@
         </div>
     </div>
     <div class="row">
-        @if (_quizzes.Length==0)
+        @if (!_isLoading && _quizzes.Length==0)
         {
             var message = _selectedCategoryId == Guid.Empty
                 ? " There are no active quizzes right now "
@@ -142,10 +142,10 @@
         AppState.ShowLoader("Preparing the quiz");
         try
         {
-            QuizApiResponse<Guid> response = await StudentQuizApi.StartQuizAsync(_startingQuiz.Id);
+            QuizApiResponse<Guid> response = await StudentQuizApi.StartQuizAsync(_startingQuiz!.Id);
             if (!response.IsSuccess)
             {
-                QuizApiResponse.Fail(response.ErrorMessage);
+                if (response.ErrorMessage != null) QuizApiResponse.Fail(response.ErrorMessage);
                 return;
             }
 
