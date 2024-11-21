@@ -123,37 +123,41 @@ public class StudentQuizService
 
     public async Task<QuizApiResponse> SaveQuestionResponseAsync(StudentQuizQuestionResponseDto dto, Guid studentId)
     {
-        var studentQuiz= await _context.StudentQuizzes
-            .AsTracking()
-            .FirstOrDefaultAsync(s => s.Id == dto.StudentQuizId);
-
-        if (studentQuiz == null)
+        try
         {
-            return QuizApiResponse.Fail("Quiz does not exist");
-        }
+            var studentQuiz = await _context.StudentQuizzes
+                .AsTracking()
+                .FirstOrDefaultAsync(s => s.Id == dto.StudentQuizId);
 
-        if (studentQuiz.StudentId != studentId)
-        {
-            return QuizApiResponse.Fail("Unauthorized access");
-        }
-
-        var isSelectedOptionCorrect = await _context.Options.Where(o=>o.QuestionId==dto.QuestionId && o.Id==dto.OptionId)
-                                .Select(o=>o.IsCorrect)
-                                .FirstOrDefaultAsync();
-        if (isSelectedOptionCorrect)
-        {
-            studentQuiz.Score++;
-            try
+            if (studentQuiz == null)
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (Exception e)
-            {
-                return QuizApiResponse.Fail(e.Message);
+                return QuizApiResponse.Fail("Quiz does not exist");
             }
 
+            if (studentQuiz.StudentId != studentId)
+            {
+                return QuizApiResponse.Fail("Unauthorized access");
+            }
+
+            var isSelectedOptionCorrect = await _context.Options
+                .Where(o => o.QuestionId == dto.QuestionId && o.Id == dto.OptionId)
+                .Select(o => o.IsCorrect)
+                .FirstOrDefaultAsync();
+
+            if (isSelectedOptionCorrect)
+            {
+                studentQuiz.Score++;
+            }
+
+            await _context.SaveChangesAsync();
+            return QuizApiResponse.Success();
         }
-        return QuizApiResponse.Success();
+        catch (Exception e)
+        {
+            // Log the exception message
+            Console.WriteLine($"An error occurred: {e.Message}");
+            return QuizApiResponse.Fail(e.Message);
+        }
     }
 
     public async Task<QuizApiResponse> SubmitQuizAsync(Guid studentQuizId, Guid studentId) 

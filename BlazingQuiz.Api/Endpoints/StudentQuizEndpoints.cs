@@ -27,14 +27,40 @@ public static class StudentQuizEndpoints
         quizGroup.MapGet("/{studentQuizId:guid}/next-question", async (Guid studentQuizId, StudentQuizService service, ClaimsPrincipal user)
             => Results.Ok(await service.GetNextQuestionForQuizAsync(studentQuizId,user.GetStudentId())));
 
-        quizGroup.MapPost("/{studentQuizId:guid}/save-response", async (Guid studentQuizId,StudentQuizQuestionResponseDto dto, StudentQuizService service, ClaimsPrincipal user)
-            =>
+        quizGroup.MapPost("/{studentQuizId:guid}/save-response", async (Guid studentQuizId, StudentQuizQuestionResponseDto dto, StudentQuizService service, ClaimsPrincipal user) =>
         {
-            if(studentQuizId != dto.StudentQuizId)
-                Results.Unauthorized();
+            // Gelen DTO null mý kontrol et
+            if (dto == null)
+            {
+                return Results.BadRequest("Request body is missing or invalid.");
+            }
 
-            Results.Ok(await service.SaveQuestionResponseAsync(dto, user.GetStudentId()));
+            // DTO'daki StudentQuizId ile URL'deki studentQuizId eþleþiyor mu kontrol et
+            if (studentQuizId != dto.StudentQuizId)
+            {
+                return Results.Unauthorized();
+            }
+
+            // Kullanýcýnýn kimliðini al
+            var studentIdValue = user.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (string.IsNullOrEmpty(studentIdValue) || !Guid.TryParse(studentIdValue, out Guid studentId))
+            {
+                return Results.Unauthorized();
+            }
+
+            // Servis katmanýndan sonucu al
+            var result = await service.SaveQuestionResponseAsync(dto, studentId);
+
+            // Servis çaðrýsý baþarýsýz olduysa BadRequest döndür
+            if (!result.IsSuccess)
+            {
+                return Results.BadRequest(result.ErrorMessage ?? "An error occurred while saving the response.");
+            }
+
+            // Baþarýlýysa Ok döndür
+            return Results.Ok(result);
         });
+
 
         quizGroup.MapPost("/{studentQuizId:guid}/submit", async (Guid studentQuizId, StudentQuizService service, ClaimsPrincipal user)
             => Results.Ok(await service.SubmitQuizAsync(studentQuizId, user.GetStudentId())));
