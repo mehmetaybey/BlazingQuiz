@@ -16,7 +16,7 @@ public static class UserEndpoints
             return Results.Ok(await service.GetUsersAsync(approvedType, startIndex, pageSize));
         });
 
-        group.MapPatch("{userId:Guid}/toogle-status", async (Guid userId, UserService service)
+        group.MapPatch("{userId:Guid}/toggle-status", async (Guid userId, UserService service)
             =>
         {
             await service.ToggleUserApprovedStatusAsync(userId);

@@ -29,35 +29,35 @@ public static class StudentQuizEndpoints
 
         quizGroup.MapPost("/{studentQuizId:guid}/save-response", async (Guid studentQuizId, StudentQuizQuestionResponseDto dto, StudentQuizService service, ClaimsPrincipal user) =>
         {
-            // Gelen DTO null mý kontrol et
+            // Gelen DTO null mu kontrol et
             if (dto == null)
             {
                 return Results.BadRequest("Request body is missing or invalid.");
             }
 
-            // DTO'daki StudentQuizId ile URL'deki studentQuizId eþleþiyor mu kontrol et
+            // DTO'daki StudentQuizId ile URL'deki studentQuizId geliyor mu kontrol et
             if (studentQuizId != dto.StudentQuizId)
             {
                 return Results.Unauthorized();
             }
 
-            // Kullanýcýnýn kimliðini al
+            // KullanÄ±cÄ±nÄ±n kimliÄŸini al
             var studentIdValue = user.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(studentIdValue) || !Guid.TryParse(studentIdValue, out Guid studentId))
             {
                 return Results.Unauthorized();
             }
 
-            // Servis katmanýndan sonucu al
+            // Servis katmanÄ±ndan sonucu al
             var result = await service.SaveQuestionResponseAsync(dto, studentId);
 
-            // Servis çaðrýsý baþarýsýz olduysa BadRequest döndür
+            // Servis cevabÄ± baÅŸarÄ±sÄ±z olduysa BadRequest dÃ¶ndÃ¼r
             if (!result.IsSuccess)
             {
                 return Results.BadRequest(result.ErrorMessage ?? "An error occurred while saving the response.");
             }
 
-            // Baþarýlýysa Ok döndür
+            // Baï¿½arï¿½lï¿½ysa Ok dÃ¶ndÃ¼r
             return Results.Ok(result);
         });
 

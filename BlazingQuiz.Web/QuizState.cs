@@ -8,4 +8,5 @@ public class QuizState
     public QuizListDto? Quiz { get; private set; }
 
     public void StartQuiz(QuizListDto? quiz,Guid studentQuizId) => (Quiz,StudentQuizId) = (quiz,studentQuizId);
+    public void StopQuiz()=>(Quiz,StudentQuizId) = (null,Guid.Empty);
 }

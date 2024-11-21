@@ -8,16 +8,16 @@ namespace BlazingQuiz.Web.Api
     [Headers("Authorization: Bearer")]
     public interface IQuizApi
     {
-        [Post("/api/quizes")]
+        [Post("/api/quizzes")]
         Task<QuizApiResponse> SaveQuizAsync(QuizSaveDto dto);
 
-        [Get("/api/quizes")]
-        Task<QuizListDto[]> GetQuizesAsync();
+        [Get("/api/quizzes")]
+        Task<QuizListDto[]> GetQuizzesAsync();
 
-        [Get("/api/quizes/{quizId}/questions")]
+        [Get("/api/quizzes/{quizId}/questions")]
         Task<QuestionDto[]> GetQuizQuestionsAsync(Guid quizId);
 
-        [Get("/api/quizes/{quizId}")]
+        [Get("/api/quizzes/{quizId}")]
         Task<QuizSaveDto?> GetQuizToEditAsync(Guid quizId);
     }
 }

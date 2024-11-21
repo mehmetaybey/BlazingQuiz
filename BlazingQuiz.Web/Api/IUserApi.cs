@@ -12,6 +12,6 @@ public interface IUserApi
     [Get("/api/users")]
     Task<PagedResult<UserDto>> GetUsersAsync(UserApprovedFilter approvedType, int startIndex, int pageSize);
 
-    [Patch("/api/users/{userId}/toogle-status")]
+    [Patch("/api/users/{userId}/toggle-status")]
     Task ToggleUserApprovedStatusAsync(Guid userId);
 }

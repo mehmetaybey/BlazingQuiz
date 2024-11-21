@@ -91,7 +91,7 @@
         AppState.ShowLoader("Fetching quizes and categories");
         try
         {
-            var quizesTask = QuizApi.GetQuizesAsync();
+            var quizesTask = QuizApi.GetQuizzesAsync();
             _categories = await CategoryApi.GetCategoriesAsync();
             _quizzes = await quizesTask;
             _filtredQuizzes = _quizzes;
