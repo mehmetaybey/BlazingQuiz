@@ -1,4 +1,5 @@
 ﻿@page "/student/quiz"
+@layout QuizPageLayout
 
 @inject QuizState QuizState
 @inject NavigationManager NavigationManager
@@ -70,6 +71,7 @@
 @if (_showExitQuizConfirmation)
 {
     <Modal Title="Exit Quiz ?"
+           ActionButtonText="Yes"
            OnActionButtonClick="ExitQuizAsync" 
            OnCancelButtonClick="() =>_showExitQuizConfirmation =false ">
         <h5 class="text-danger">Do you really want to exit the quiz?</h5>

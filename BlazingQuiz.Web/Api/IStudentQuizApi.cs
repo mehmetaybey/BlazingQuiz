@@ -11,7 +11,10 @@ public interface IStudentQuizApi
     
     [Post("/api/student/quiz/{quizId}/start")]
     Task<QuizApiResponse<Guid>> StartQuizAsync(Guid quizId);
-    
+
+    [Get("/api/student/my-quizzes")]
+    Task<PagedResult<StudentQuizDto>> GetStudentQuizzesAsync(int startIndex, int pageSize);
+
     [Get("/api/student/quiz/{studentQuizId}/next-question")]
     Task<QuizApiResponse<QuestionDto?>> GetNextQuestionForQuizAsync(Guid studentQuizId);
     

@@ -23,4 +23,10 @@
     <ProjectReference Include="..\BlazingQuiz.Shared\BlazingQuiz.Shared.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Content Update="Layout\QuizPageLayout.razor">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+    </Content>
+  </ItemGroup>
+
 </Project>

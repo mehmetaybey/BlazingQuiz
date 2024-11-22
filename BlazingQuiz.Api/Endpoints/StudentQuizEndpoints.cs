@@ -18,7 +18,9 @@ public static class StudentQuizEndpoints
 
         group.MapGet("/available-quizzes", async (Guid categoryId, StudentQuizService service) 
             => Results.Ok( await service.GetActiveQuizzesAsync(categoryId)));
-            
+
+        group.MapGet("/my-quizzes", async (int startIndex, int pageSize, StudentQuizService service, ClaimsPrincipal user) 
+            => Results.Ok(await service.GetStudentQuizzesAsync(user.GetStudentId(), startIndex, pageSize)));
         
         var quizGroup= group.MapGroup("/quiz");
         quizGroup.MapPost("/{quizId:guid}/start", async (Guid quizId, StudentQuizService service, ClaimsPrincipal user)

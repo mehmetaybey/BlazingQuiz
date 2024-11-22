@@ -214,6 +214,32 @@ public class StudentQuizService
 
     }
 
+    public async Task<PagedResult<StudentQuizDto>> GetStudentQuizzesAsync(Guid studentId,int startIndex,int pageSize)
+    {
+        var query = _context.StudentQuizzes.Where(q=> q.StudentId== studentId);
+
+        var count= await query.CountAsync();
+
+        var quizzes = await query.OrderByDescending(q => q.StartedOn)
+            .Skip(startIndex)
+            .Take(pageSize)
+            .Select(q=> new StudentQuizDto
+            {
+                Id = q.Id,
+                QuizId = q.QuizId,
+                QuizName = q.Quiz.Name,
+                CategoryName = q.Quiz.Category.Name,
+                StartedOn = q.StartedOn,
+                Status = q.Status,
+                Score = q.Score,
+                CompletedOn = q.CompletedOn
+            })
+            .ToArrayAsync();
+
+        return new PagedResult<StudentQuizDto>(quizzes, count);
+    }
+    
+
 }
 
 
