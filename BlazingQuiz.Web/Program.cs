@@ -43,7 +43,7 @@ static void ConfigureRefit(IServiceCollection service)
     service.AddRefitClient<ICategoryApi>(GetRefitSettings)
         .ConfigureHttpClient(SetHttpClient);
 
-    service.AddRefitClient<IUserApi>(GetRefitSettings)
+    service.AddRefitClient<IAdminApi>(GetRefitSettings)
         .ConfigureHttpClient(SetHttpClient);
     
     service.AddRefitClient<IStudentQuizApi>(GetRefitSettings)
