@@ -8,23 +8,29 @@
 @if (_data != null)
 {
     <div class="row">
-        <div class="col-sm-4 bg-white">
-            <h4 class="fw-bold">Categories</h4>
-            <hr/>
-            <h3>@_data.TotalCategories</h3>
+        <div class="col-sm-4">
+            <div class="box bg-white p-3 h-100">
+                <h4 class="fw-bold">Categories</h4>
+                <hr/>
+                <h3>@_data.TotalCategories</h3>
+            </div>
         </div>
-        <div class="col-sm-4 bg-white">
-            <h4 class="fw-bold">Students</h4>
-            <hr/>
-            <h3>@_data.TotalStudents</h3>
-            <h3>@_data.ApprovedStudents Approved</h3>
+        <div class="col-sm-4 ">
+            <div class="box bg-white p-3">    
+                <h4 class="fw-bold">Students</h4>
+                <hr/>
+                <h3>@_data.TotalStudents</h3>
+                <h3>@_data.ApprovedStudents Approved</h3>
+                </div>
 
         </div>
-        <div class="col-sm-4 bg-white">
-            <h4 class="fw-bold">Quizzes</h4>
-            <hr/>
-            <h3>@_data.TotalQuizzes</h3>
-            <h3>@_data.ActiveQuizzes Active</h3>
+        <div class="col-sm-4 ">
+            <div class="option-box bg-white p-3">
+                <h4 class="fw-bold">Quizzes</h4>
+                <hr/>
+                <h3>@_data.TotalQuizzes</h3>
+                <h3>@_data.ActiveQuizzes Active</h3>
+            </div>
 
         </div>
      

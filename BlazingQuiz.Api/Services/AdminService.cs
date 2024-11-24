@@ -34,7 +34,7 @@ public class AdminService
     }
     public async Task<PagedResult<UserDto>> GetUsersAsync(UserApprovedFilter approvedType, int startIndex, int pageSize)
     {
-        await using var context =_contextFactory.CreateDbContext();
+        using var context =_contextFactory.CreateDbContext();
         var query = context.Users.Where(u=>u.Role !=nameof(UserRole.Admin)).AsQueryable();
         if (approvedType != UserApprovedFilter.All)
         {

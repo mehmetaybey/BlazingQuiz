@@ -13,13 +13,20 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddTransient<IPasswordHasher<User>, PasswordHasher<User>>();
+
+var connectionString = builder.Configuration.GetConnectionString("sqlConnection");
+
 builder.Services.AddDbContext<QuizContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"));
+    options.UseSqlServer(connectionString);
 },optionsLifetime:ServiceLifetime.Singleton);
+
+
 builder.Services.AddDbContextFactory<QuizContext>(options =>
 {
-    options.UseSqlServer(builder.Configuration.GetConnectionString("sqlConnection"));
+    options.UseSqlServer(connectionString);
 });
 
 // builder.Services.AddSingleton<Func<QuizContext>>(sp => () =>
@@ -69,7 +76,6 @@ builder.Services.AddScoped<AuthService>()
     .AddScoped<QuizService>()
     .AddScoped<AdminService>()
     .AddScoped<StudentQuizService>();
-builder.Services.AddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
 
 var app = builder.Build();
 
