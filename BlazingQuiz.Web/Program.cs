@@ -1,7 +1,6 @@
 using System;
 using BlazingQuiz.Web;
 using BlazingQuiz.Web.Api;
-using BlazingQuiz.Web.Auth;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
@@ -9,6 +8,8 @@ using Refit;
 using System.Net.Http;
 using System.Threading.Tasks;
 using BlazingQuiz.Shared;
+using BlazingQuiz.Shared.Components.Api;
+using BlazingQuiz.Shared.Components.Auth;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);

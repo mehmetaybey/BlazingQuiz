@@ -29,4 +29,9 @@
     </Content>
   </ItemGroup>
 
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Auth\Register.razor" />
+  </ItemGroup>
+
 </Project>

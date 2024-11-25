@@ -1,15 +1,10 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text.Json;
-using System.Threading.Tasks;
-using BlazingQuiz.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.JSInterop;
 
-namespace BlazingQuiz.Web.Auth
+namespace BlazingQuiz.Shared.Components.Auth
 {
     public class QuizAuthStateProvider :AuthenticationStateProvider
     {
