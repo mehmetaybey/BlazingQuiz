@@ -1,6 +1,11 @@
-﻿using BlazingQuiz.Shared.Components.Auth;
+﻿using BlazingQuiz.Mobile.Services;
+using BlazingQuiz.Shared;
+using BlazingQuiz.Shared.Components.Api;
+using BlazingQuiz.Shared.Components.Auth;
+using BlazingQuiz.Web.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
+using Refit;
 
 namespace BlazingQuiz.Mobile
 {
@@ -27,8 +32,33 @@ namespace BlazingQuiz.Mobile
             builder.Services.AddSingleton<AuthenticationStateProvider>(p => p.GetRequiredService<QuizAuthStateProvider>());
             builder.Services.AddAuthorizationCore();
 
-
+            builder.Services.AddSingleton<IStorageService, StorageService>()
+                .AddSingleton<IAppState,AppState>();
+            
+            ConfigureRefit(builder.Services);
+            
             return builder.Build();
         }
+        static void ConfigureRefit(IServiceCollection service)
+        {
+            const string baseUrl = "https://localhost:7189";
+
+            service.AddRefitClient<IAuthApi>()
+                .ConfigureHttpClient(SetHttpClient);
+                
+            static void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(baseUrl);
+
+            static RefitSettings GetRefitSettings(IServiceProvider sp)
+            {
+                var authStateProvider = sp.GetRequiredService<QuizAuthStateProvider>();
+
+                return new RefitSettings
+                {
+                    AuthorizationHeaderValueGetter = (_,__) =>Task.FromResult(authStateProvider.User?.Token ?? "")
+                };
+            }
+    
+        }
+
     }
 }

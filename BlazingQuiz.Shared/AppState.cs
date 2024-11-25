@@ -1,7 +1,4 @@
-using System;
-using BlazingQuiz.Shared;
-
-namespace BlazingQuiz.Web;
+namespace BlazingQuiz.Shared;
 
 public class AppState :IAppState
 {

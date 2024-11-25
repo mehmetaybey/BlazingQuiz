@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using BlazingQuiz.Shared;
 using BlazingQuiz.Shared.Components.Api;
 using BlazingQuiz.Shared.Components.Auth;
+using BlazingQuiz.Web.Services;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -22,7 +23,8 @@ builder.Services.AddSingleton<AuthenticationStateProvider>(p => p.GetRequiredSer
 builder.Services.AddAuthorizationCore();
 
 builder.Services.AddSingleton<IAppState, AppState>()
-    .AddSingleton<QuizState>();
+    .AddSingleton<QuizState>()
+    .AddSingleton<IStorageService,StorageService>();
 
 //builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 

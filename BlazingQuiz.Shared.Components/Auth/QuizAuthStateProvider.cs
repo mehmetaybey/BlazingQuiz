@@ -11,14 +11,14 @@ namespace BlazingQuiz.Shared.Components.Auth
         private const string AuthType = "quiz-auth";
         private const string UserDataKey = "userData";
 
-        private readonly IJSRuntime _jsRuntime;
         private readonly NavigationManager _nav;
+        private readonly IStorageService _storageService;
         private  Task<AuthenticationState> _authStateTask;
 
-        public QuizAuthStateProvider(IJSRuntime jsRuntime, NavigationManager nav)
+        public QuizAuthStateProvider(NavigationManager nav, IStorageService storageService)
         {
-            _jsRuntime = jsRuntime;
             _nav = nav;
+            _storageService = storageService;
             SetAuthStateTask();
         }
 
@@ -32,7 +32,7 @@ namespace BlazingQuiz.Shared.Components.Auth
             User = user;
             SetAuthStateTask();
             NotifyAuthenticationStateChanged(_authStateTask);
-            await _jsRuntime.InvokeVoidAsync("localStorage.setItem", UserDataKey, user.ToJson());
+            await _storageService.SetItem(UserDataKey,user.ToJson());
 
         }
         public async Task SetLogoutAsync()
@@ -40,7 +40,7 @@ namespace BlazingQuiz.Shared.Components.Auth
             User = null;
             SetAuthStateTask();
             NotifyAuthenticationStateChanged(_authStateTask);
-            await _jsRuntime.InvokeVoidAsync("localStorage.removeItem", UserDataKey);
+            await _storageService.RemoveItem(UserDataKey);
 
         }
 
@@ -48,12 +48,19 @@ namespace BlazingQuiz.Shared.Components.Auth
 
         public async Task InitializeAsync()
         {
+            await InitializeAsync(redirectToLogin: true);
+        }
+
+        public async Task<bool> InitializeAsync(bool redirectToLogin=true)
+        {
             try
             {
-                var udata = await _jsRuntime.InvokeAsync<string?>("localStorage.getItem", UserDataKey);
+                var udata = await _storageService.GetItem(UserDataKey);
                 if (string.IsNullOrWhiteSpace(udata))
                 {
-                    return;
+                    if(redirectToLogin)
+                        RedirectToLogin();
+                    return false;
 
                 }
 
@@ -61,16 +68,19 @@ namespace BlazingQuiz.Shared.Components.Auth
                 if (user == null || user.Id == Guid.Empty)
                 {
                     //userdata is invalid
-                    RedirectToLogin();
-                    return;
+                    if(redirectToLogin)
+                        RedirectToLogin();
+                    return false;
                 }
 
                 if (!IsTokenValid(user.Token))
                 {
-                    RedirectToLogin();
-                    return;
+                    if(redirectToLogin)
+                        RedirectToLogin();
+                    return false;
                 }
                 await SetLoginAsync(user);
+                return true;
 
             }
             catch(Exception ex)
@@ -82,7 +92,9 @@ namespace BlazingQuiz.Shared.Components.Auth
             finally
             {
                 IsInitializing = false;
-            } 
+            }
+
+            return false;
         }
 
         private void RedirectToLogin()
