@@ -9,6 +9,7 @@ public class AppState :IAppState
     {
         LoadingText = null;
         OnToggleLoader?.Invoke();
+        
     }
 
     public void ShowLoader(string loadingText)

@@ -1,4 +1,6 @@
-﻿<Router AppAssembly="@typeof(App).Assembly" AdditionalAssemblies="new []{typeof(BlazingQuiz.Shared.Components.Auth.QuizAuthStateProvider).Assembly}">
+﻿<Router AppAssembly="@typeof(App).Assembly" 
+        AdditionalAssemblies="new []{typeof(BlazingQuiz.Shared.Components.Auth.QuizAuthStateProvider)
+        .Assembly}">
     <Found Context="routeData">
         <AuthorizeRouteView  RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
         <FocusOnNavigate RouteData="@routeData" Selector="h1" />

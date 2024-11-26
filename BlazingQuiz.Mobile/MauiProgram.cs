@@ -2,7 +2,6 @@
 using BlazingQuiz.Shared;
 using BlazingQuiz.Shared.Components.Api;
 using BlazingQuiz.Shared.Components.Auth;
-using BlazingQuiz.Web.Api;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.Extensions.Logging;
 using Refit;
@@ -42,11 +41,11 @@ namespace BlazingQuiz.Mobile
         static void ConfigureRefit(IServiceCollection service)
         {
             const string baseUrl = "https://localhost:7189";
+            static void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(baseUrl);
 
             service.AddRefitClient<IAuthApi>()
                 .ConfigureHttpClient(SetHttpClient);
-                
-            static void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(baseUrl);
+            
 
             static RefitSettings GetRefitSettings(IServiceProvider sp)
             {

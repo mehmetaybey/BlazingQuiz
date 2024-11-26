@@ -30,6 +30,7 @@
         <!-- Versions -->
         <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
+        <StaticWebAssetBasePath>/mobile/</StaticWebAssetBasePath>
 
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
@@ -62,12 +63,13 @@
         <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.AspNetCore.Components.WebView.Maui" Version="$(MauiVersion)" />
         <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+        <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0"/>
+        
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\BlazingQuiz.Shared.Components\BlazingQuiz.Shared.Components.csproj" />
       <ProjectReference Include="..\BlazingQuiz.Shared\BlazingQuiz.Shared.csproj" />
-      <ProjectReference Include="..\BlazingQuiz.Web\BlazingQuiz.Web.csproj" />
     </ItemGroup>
 
 </Project>
