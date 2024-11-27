@@ -1,9 +1,9 @@
-﻿html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+﻿html, body, * {
+    font-family: "Poppins", 'Helvetica Neue', Helvetica, Arial, sans-serif !important;
 }
 
-a, .btn-link {
-    color: #006bb7;
+html,body {
+    background-color: #ededf0;
 }
 
 .btn-primary {
