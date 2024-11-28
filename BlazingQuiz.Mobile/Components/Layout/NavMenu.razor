@@ -3,10 +3,10 @@
 
 
     <div class="offcanvas offcanvas-start show" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1"
-         id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel" style="visibility: visible;"
+     id="offcanvasWithBackdrop" aria-labelledby="offcanvasWithBackdropLabel" style="visibility: visible;"
          aria-modal="true" role="dialog">
         <div class="offcanvas-header">
-            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Colored with scrolling</h5>
+        <h5 class="offcanvas-title" id="offcanvasWithBackdropLabel">Colored with scrolling</h5>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close" @onclick="OnMenuClosed"></button>
         </div>
         <div class="offcanvas-body">
@@ -23,7 +23,7 @@
                         </NavLink>
                     </div>
                     <div class="nav-item px-3">
-                        <a role="button" class="nav-link" @onclick="OnMenuClosed">
+                        <a role="button" class="nav-link" @onclick="LogoutAsync">
                             Logout
                         </a>
                     </div>
@@ -32,7 +32,7 @@
             </div>
         </div>
     </div>
-    <div class="offcanvas-backdrop fade show" @onclick="LogoutAsync"></div>
+    <div class="offcanvas-backdrop fade show" @onclick="OnMenuClosed"></div>
 
 @code
 
