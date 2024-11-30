@@ -41,7 +41,8 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<IStorageService, StorageService>()
             .AddSingleton<IAppState, AppState>()
-            .AddSingleton<QuizState>();
+            .AddSingleton<QuizState>()
+            .AddSingleton<IPlatform,MobilePlatform>();
 
         ConfigureRefit(builder.Services);
 

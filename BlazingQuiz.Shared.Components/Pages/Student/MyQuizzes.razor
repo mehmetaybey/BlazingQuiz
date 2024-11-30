@@ -1,54 +1,65 @@
 ﻿@page "/student/my-quizzes"
 @inject IAppState AppState
 @inject IStudentQuizApi StudentQuizApi
+@inject IPlatform Platform
 
 <SectionContent SectionName="pageTitle">My Quizzes</SectionContent>
 
 <div class="container-fluid">
     <div class="row">
-        <div class="table-responsive">
-            <QuickGrid ItemsProvider="_itemsProvider" Pagination="_paginationState" Class="table table-striped table-hover">
-                <PropertyColumn Property="q => q.QuizName" Title="Quiz Name" />
-                <PropertyColumn Property="q => q.CategoryName" Title="Category" />
-                <PropertyColumn Property="q => q.Status" />
-                <PropertyColumn Property="q => q.StartedOn" Title="Started On" Format="dd MM yyyy hh:mm" />
-                <TemplateColumn Title="Completed">
-                    @if (context.CompletedOn.HasValue)
-                    {
-                        <span>@context.CompletedOn.Value.ToString("dd MM yyyy hh:mm")</span>
-                    }
-                    else
-                    {
-                        @if (context.Status == "Exited")
-                        {
-                            <span>Quiz Exited</span>
-                        }
-                        else
-                        {
-                            <span>Not Completed</span>
-                        }
-                    }
-                </TemplateColumn>
-                <PropertyColumn Property="q => q.Score" Class="text-center" />
-            </QuickGrid>
+        <div class="col-sm-12">
+            <div class="d-flex h-100 flex-column">
+                <div class="table-responsive flex-grow-1">
+                    <QuickGrid ItemsProvider="_itemsProvider" Pagination="_paginationState" Class="table table-striped table-hover">
+                        <PropertyColumn Property="q => q.QuizName" Title="Quiz Name" />
+                        <PropertyColumn Property="q => q.CategoryName" Title="Category" />
+                        <PropertyColumn Property="q => q.Status" />
+                        <PropertyColumn Property="q => q.StartedOn" Title="Started On" Format="dd MM yyyy hh:mm" />
+                        <TemplateColumn Title="Completed">
+                            @if (context.CompletedOn.HasValue)
+                            {
+                                <span>@context.CompletedOn.Value.ToString("dd MM yyyy hh:mm")</span>
+                            }
+                            else
+                            {
+                                @if (context.Status == "Exited")
+                                {
+                                    <span>Quiz Exited</span>
+                                }
+                                else
+                                {
+                                    <span>Not Completed</span>
+                                }
+                            }
+                        </TemplateColumn>
+                        <PropertyColumn Property="q => q.Score" Class="text-center" />
+                    </QuickGrid>
+                </div>
+                <Paginator State="_paginationState"/>
+            </div>
         </div>
-        <Paginator State="_paginationState"/>
     </div>
 </div>
 
 @code
 {
-    private const int DefaultPageSize = 10;
+    private int _defaultPageSize = 10;
     private GridItemsProvider<StudentQuizDto>? _itemsProvider;
 
-    private PaginationState _paginationState = new PaginationState { ItemsPerPage = DefaultPageSize };
+    private PaginationState _paginationState = new();
 
     protected override void OnInitialized()
     {
+        if (Platform.IsMobileApp)
+        {
+            _defaultPageSize = 6;
+        }
+        _paginationState.ItemsPerPage = _defaultPageSize;
+        
         _itemsProvider = async (request) =>
         {
             AppState.ShowLoader("Fetch quizzes");
-            var pagedResult = await StudentQuizApi.GetStudentQuizzesAsync(request.StartIndex, request.Count ?? DefaultPageSize);
+            var pagedResult = await StudentQuizApi.GetStudentQuizzesAsync(request.StartIndex, request.Count ?? _defaultPageSize);
             AppState.HideLoader();
             return GridItemsProviderResult.From(pagedResult.Records, pagedResult.TotalCount);
         };

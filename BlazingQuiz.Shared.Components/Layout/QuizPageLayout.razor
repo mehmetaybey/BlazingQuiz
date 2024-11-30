@@ -1,16 +1,29 @@
 ﻿@inherits LayoutComponentBase
 
+@inject IPlatform Platform
+
 <div class="page">
     <main>
-    
+
         <article class="content px-4">
-            <div>
-                <h1 class="m-0 h3 fw-bold"> <SectionOutlet SectionName="pageTitle" /> </h1>
-            </div>
-            <hr/>
-
+            @if (Platform.IsMobileApp)
+            {
+                <div style="margin-top: -1.1rem;margin-left: -1.5rem;margin-right: -1.5rem;margin-bottom: 15px;height: 60px;">
+                    <h4 class="m-0 text-white" p-3 style="background-color: var()">
+                        <SectionOutlet SectionName="pageTitle"/>
+                    </h4>
+                </div>
+            }
+            else
+            {
+                <div>
+                    <h1 class="m-0 h3 fw-bold">
+                        <SectionOutlet SectionName="pageTitle"/>
+                    </h1>
+                </div>
+                <hr/>
+            }
             @Body
-
         </article>
     </main>
 </div>
