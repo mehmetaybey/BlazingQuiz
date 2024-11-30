@@ -40,7 +40,8 @@ public static class MauiProgram
         builder.Services.AddAuthorizationCore();
 
         builder.Services.AddSingleton<IStorageService, StorageService>()
-            .AddSingleton<IAppState, AppState>();
+            .AddSingleton<IAppState, AppState>()
+            .AddSingleton<QuizState>();
 
         ConfigureRefit(builder.Services);
 
@@ -55,6 +56,12 @@ public static class MauiProgram
     {
 
         service.AddRefitClient<IAuthApi>(GetRefitSettings)
+            .ConfigureHttpClient(SetHttpClient);
+        
+        service.AddRefitClient<ICategoryApi>(GetRefitSettings)
+            .ConfigureHttpClient(SetHttpClient);
+        
+        service.AddRefitClient<IStudentQuizApi>(GetRefitSettings)
             .ConfigureHttpClient(SetHttpClient);
         static void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(ApiBaseUrl);
 

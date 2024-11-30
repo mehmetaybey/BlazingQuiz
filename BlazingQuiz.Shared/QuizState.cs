@@ -1,6 +1,6 @@
 using BlazingQuiz.Shared.DTOs;
 
-namespace BlazingQuiz.Web;
+namespace BlazingQuiz.Shared;
 
 public class QuizState
 {

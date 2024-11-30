@@ -14,6 +14,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Authorization" Version="8.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.10" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid" Version="8.0.10" />
+
     <PackageReference Include="Refit.HttpClientFactory" Version="8.0.0" />
     <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.2.1" />
   </ItemGroup>
@@ -25,6 +27,10 @@
   <ItemGroup>
     <AdditionalFiles Include="Pages\Auth\Login.razor" />
     <AdditionalFiles Include="Pages\Auth\Register.razor" />
+    <AdditionalFiles Include="Pages\Student\MyQuizzes.razor" />
+    <AdditionalFiles Include="Pages\Student\Quiz.razor" />
+    <AdditionalFiles Include="Pages\Student\StudentHome.razor" />
+    <AdditionalFiles Include="Pages\Student\_Imports.razor" />
   </ItemGroup>
 
 </Project>

@@ -1,8 +1,7 @@
-﻿using System.Threading.Tasks;
-using BlazingQuiz.Shared.DTOs;
+﻿using BlazingQuiz.Shared.DTOs;
 using Refit;
 
-namespace BlazingQuiz.Web.Api
+namespace BlazingQuiz.Shared.Components.Api
 {
     [Headers("Authorization: Bearer ")]
     public interface ICategoryApi

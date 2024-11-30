@@ -1,7 +1,7 @@
 using BlazingQuiz.Shared.DTOs;
 using Refit;
 
-namespace BlazingQuiz.Web.Api;
+namespace BlazingQuiz.Shared.Components.Api;
 
 [Headers("Authorization: Bearer ")]
 public interface IStudentQuizApi

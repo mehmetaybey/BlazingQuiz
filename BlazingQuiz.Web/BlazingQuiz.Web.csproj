@@ -28,14 +28,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Layout\QuizPageLayout.razor">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Auth\Login.razor" />
     <_ContentIncludedByDefault Remove="Pages\Auth\Register.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Student\MyQuizzes.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Student\Quiz.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Student\StudentHome.razor" />
+    <_ContentIncludedByDefault Remove="Pages\Student\_Imports.razor" />
   </ItemGroup>
 
 </Project>
