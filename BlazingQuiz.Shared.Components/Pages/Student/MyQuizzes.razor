@@ -9,7 +9,7 @@
 <div class="container-fluid px-4-negative" style="@_containerStyle">
     <div class="row">
         <div class="col-sm-12">
-            <div class="d-flex vh-100 flex-column" style="@_flexStyle">
+            <div class="d-flex flex-column" style="@_flexStyle">
                 <div class="table-responsive flex-grow-1">
                     <QuickGrid ItemsProvider="_itemsProvider" Pagination="_paginationState" Class="table table-striped table-hover">
                         <PropertyColumn Property="q => q.QuizName" Title="Quiz Name" />
@@ -44,7 +44,7 @@
 
 @code
 {
-    private int _defaultPageSize = 10;
+    private int _defaultPageSize = 9;
     private GridItemsProvider<StudentQuizDto>? _itemsProvider;
 
     private PaginationState _paginationState = new();
@@ -58,9 +58,7 @@
         if (Platform.IsMobileApp)
         {
             _flexStyle = "height:calc(100vh - 75px -15px);";
-            _containerStyle = "height:calc(100% + 3rem);";
-
-            _defaultPageSize = 6;
+            _containerStyle = "width:calc(100% + 3rem);";
         }
         _paginationState.ItemsPerPage = _defaultPageSize;
         

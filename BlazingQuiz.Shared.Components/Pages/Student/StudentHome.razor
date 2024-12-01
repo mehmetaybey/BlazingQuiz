@@ -5,8 +5,9 @@
 @inject IStudentQuizApi StudentQuizApi
 @inject NavigationManager NavigationManager
 @inject QuizState QuizState
+@inject IPlatform Platform
 
-<SectionContent SectionName="pageTitle">Home</SectionContent>
+<SectionContent SectionName="pageTitle">@(Platform.IsMobileApp ? "Blazing Quiz" : "Home")Home</SectionContent>
 
 <div class="container">
     <div class="row">
