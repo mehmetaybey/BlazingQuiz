@@ -1,4 +1,6 @@
 
+@inject IAppState AppState
+
 <label class="fw-bold">
      <span class="@_textColorClass">@_currentDisplayTime</span>/@_totalDisplayTime
 </label>
@@ -51,8 +53,7 @@
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                AppState.ShowError(e.Message);
             }
         }
     }

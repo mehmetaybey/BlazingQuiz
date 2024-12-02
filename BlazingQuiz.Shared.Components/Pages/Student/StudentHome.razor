@@ -104,8 +104,7 @@
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            AppState.ShowError(e.Message);
         }
         finally
         {
@@ -128,8 +127,7 @@
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            AppState.ShowError(e.Message);
         }
         finally
         {

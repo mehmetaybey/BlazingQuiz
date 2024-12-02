@@ -6,4 +6,7 @@ public interface IAppState
     void ShowLoader(string loadingText);
     void HideLoader();
     event Action? OnToggleLoader;
+    
+    event Action<string>? OnShowError;
+    void ShowError(string errorText);
 }

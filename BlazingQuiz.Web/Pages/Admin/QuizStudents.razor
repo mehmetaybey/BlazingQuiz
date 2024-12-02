@@ -69,18 +69,20 @@
                     _fetchQuizInfo = false;
                     InvokeAsync(StateHasChanged);
                 }
+
                 return GridItemsProviderResult.From(result.Students.Records, result.Students.TotalCount);
                 
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                throw;
+                AppState.ShowError(e.Message);
             }
             finally
             {
                 AppState.HideLoader();
             }
+
+            return GridItemsProviderResult.From<AdminQuizStudentDto>([],0);
         };
       
     }
