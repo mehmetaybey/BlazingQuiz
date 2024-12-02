@@ -65,5 +65,46 @@ public class AdminService
             await context.SaveChangesAsync();
         }
     }
+
+    public async Task<AdminQuizStudentListDto> GetQuizStudentAsync(Guid quizId , int startIndex, int pageSize,bool fetchQuizInfo)
+    {
+        var result=new AdminQuizStudentListDto();
+        using var context = _contextFactory.CreateDbContext();
+
+        if (fetchQuizInfo)
+        {
+            var quizInfo= await context
+                .Quizzes
+                .Where(q => q.Id == quizId)
+                .Select(q=>new {QuizName= q.Name, CategoryName = q.Category.Name})
+                .FirstOrDefaultAsync();
+
+            if (quizInfo == null)
+            {
+                result.Students = new PagedResult<AdminQuizStudentDto>([], 0);
+                return result;
+            }
+            result.QuizName = quizInfo.QuizName;
+            result.CategoryName = quizInfo.CategoryName;
+        }
+        var query =  context.StudentQuizzes.Where(q => q.QuizId == quizId);
+        var count= await query.CountAsync();
+        var students = await query
+            .OrderByDescending(q=>q.StartedOn)
+            .Skip(startIndex)
+            .Take(pageSize)
+            .Select(s => new AdminQuizStudentDto
+            {
+                CompletedOn = DateTime.Now,
+                Name = s.Student.Name,
+                StartedOn = DateTime.Now,
+                Score = s.Score,
+                Status = s.Status,
+
+            }).ToArrayAsync();
+        var pagedStudents = new PagedResult<AdminQuizStudentDto>(students, count);
+        result.Students = pagedStudents;
+        return result;
+    } 
     
 }

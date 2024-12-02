@@ -52,6 +52,7 @@
                             <td>
                                 <div class="d-flex justify-content-around">
                                     <button type="button" class="btn btn-sm btn-info" @onclick="() => ViewQuestionsAsync(q)">View Questions</button>
+                                    <a href="admin/quizzes{@q.Id}/view-students" class="btn btn-sm btn-success" >View Attempts</a>
                                     <a href="admin/edit-quizes/@q.Id" class="btn btn-sm btn-primary">Edit Questions</a>
                                 </div>
                             </td>

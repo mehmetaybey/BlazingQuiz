@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace BlazingQuiz.Shared.DTOs
-{
+﻿
+namespace BlazingQuiz.Shared.DTOs;
     public class StudentQuizDto
     {
 
@@ -27,4 +19,3 @@ namespace BlazingQuiz.Shared.DTOs
         public int Score { get; set; }
 
     }
-}
