@@ -36,7 +36,7 @@
                         <PropertyColumn Property="q => q.Score" Class="text-center" />
                     </QuickGrid>
                 </div>
-                <Paginator State="_paginationState"/>
+                <Paginator State="_paginationState" />
             </div>
         </div>
     </div>
@@ -61,7 +61,7 @@
             _containerStyle = "width:calc(100% + 3rem);";
         }
         _paginationState.ItemsPerPage = _defaultPageSize;
-        
+
         _itemsProvider = async (request) =>
         {
             AppState.ShowLoader("Fetch quizzes");

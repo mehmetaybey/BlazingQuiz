@@ -49,12 +49,27 @@ public static class MauiProgram
         return builder.Build();
     }
 
-    private static readonly string ApiBaseUrl = DeviceInfo.Platform == DevicePlatform.Android
-        ? "https://10.0.2.2:7189"
-        : "https://localhost:7189";
+    //private static readonly string ApiBaseUrl = 
+    //    DeviceInfo.DeviceType == DeviceType.Physical 
+    //    ? "https://d1754429-7189.euw.devtunnels.ms/"
+    //    : (DeviceInfo.Platform == DevicePlatform.Android
+    //                        ? "https://10.0.2.2:7189"
+    //                        : "https://localhost:7189");
+
 
     static void ConfigureRefit(IServiceCollection service)
     {
+        var apiBaseUrl= "https://localhost:7189";
+        if (DeviceInfo.DeviceType == DeviceType.Physical || DeviceInfo.Platform == DevicePlatform.iOS)
+        {
+            apiBaseUrl = "https://d1754429-7189.euw.devtunnels.ms";
+
+        }
+        else if(DeviceInfo.Platform == DevicePlatform.Android  )
+        {
+                apiBaseUrl = "https://10.0.2.2:7189";
+
+        }
 
         service.AddRefitClient<IAuthApi>(GetRefitSettings)
             .ConfigureHttpClient(SetHttpClient);
@@ -64,7 +79,7 @@ public static class MauiProgram
         
         service.AddRefitClient<IStudentQuizApi>(GetRefitSettings)
             .ConfigureHttpClient(SetHttpClient);
-        static void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(ApiBaseUrl);
+         void SetHttpClient(HttpClient httpClient) => httpClient.BaseAddress = new Uri(apiBaseUrl);
 
 
 
