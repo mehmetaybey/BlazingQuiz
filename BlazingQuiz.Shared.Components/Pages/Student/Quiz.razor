@@ -15,7 +15,7 @@
     string style = "";
     if (Platform.IsMobileApp)
     {
-        style = "height: calc(100vh - 75px - 15px)";
+        style = "height: calc(100vh - 75px - 25px - env(safe-area-inset-top))";
     }
     <div class="row mb-3">
         <div class="col-sm-12 d-flex flex-column" style="@style">

@@ -57,7 +57,7 @@
     {
         if (Platform.IsMobileApp)
         {
-            _flexStyle = "height:calc(100vh - 75px -15px);";
+            _flexStyle = "height:calc(100vh - 75px -25px - env(safe-area-inset-top));";
             _containerStyle = "width:calc(100% + 3rem);";
         }
         _paginationState.ItemsPerPage = _defaultPageSize;
